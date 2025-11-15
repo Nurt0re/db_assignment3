@@ -1,21 +1,17 @@
--- Database Schema for Caregiving Platform
--- Created: November 15, 2025
--- Drop tables if they exist (in reverse order of dependencies)
-DROP TABLE IF EXISTS APPOINTMENT;
+DROP TABLE IF EXISTS appointment;
 
-DROP TABLE IF EXISTS JOB_APPLICATION;
+DROP TABLE IF EXISTS job_application;
 
-DROP TABLE IF EXISTS JOB;
+DROP TABLE IF EXISTS job;
 
-DROP TABLE IF EXISTS ADDRESS;
+DROP TABLE IF EXISTS address;
 
-DROP TABLE IF EXISTS MEMBER;
+DROP TABLE IF EXISTS member;
 
-DROP TABLE IF EXISTS CAREGIVER;
+DROP TABLE IF EXISTS caregiver;
 
-DROP TABLE IF EXISTS USER;
+DROP TABLE IF EXISTS "user";
 
--- Create USER table
 CREATE TABLE
 	"user" (
 		user_id SERIAL PRIMARY KEY,
@@ -30,7 +26,6 @@ CREATE TABLE
 		updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);
 
--- Create CAREGIVER table
 CREATE TABLE
 	caregiver (
 		caregiver_user_id INT PRIMARY KEY,
@@ -43,7 +38,6 @@ CREATE TABLE
 		FOREIGN KEY (caregiver_user_id) REFERENCES "user" (user_id) ON DELETE CASCADE
 	);
 
--- Create MEMBER table
 CREATE TABLE
 	member (
 		member_user_id INT PRIMARY KEY,
@@ -52,7 +46,6 @@ CREATE TABLE
 		FOREIGN KEY (member_user_id) REFERENCES "user" (user_id) ON DELETE CASCADE
 	);
 
--- Create ADDRESS table
 CREATE TABLE
 	address (
 		address_id SERIAL PRIMARY KEY,
@@ -63,7 +56,6 @@ CREATE TABLE
 		FOREIGN KEY (member_user_id) REFERENCES member (member_user_id) ON DELETE CASCADE
 	);
 
--- Create JOB table
 CREATE TABLE
 	job (
 		job_id SERIAL PRIMARY KEY,
@@ -74,7 +66,6 @@ CREATE TABLE
 		FOREIGN KEY (member_user_id) REFERENCES member (member_user_id) ON DELETE CASCADE
 	);
 
--- Create JOB_APPLICATION table
 CREATE TABLE
 	job_application (
 		application_id SERIAL PRIMARY KEY,
@@ -86,7 +77,6 @@ CREATE TABLE
 		CONSTRAINT unique_application UNIQUE (caregiver_user_id, job_id)
 	);
 
--- Create APPOINTMENT table
 CREATE TABLE
 	appointment (
 		appointment_id SERIAL PRIMARY KEY,
@@ -107,7 +97,6 @@ CREATE TABLE
 		FOREIGN KEY (member_user_id) REFERENCES member (member_user_id) ON DELETE CASCADE
 	);
 
--- Create indexes for better query performance
 CREATE INDEX idx_user_email ON "user" (email);
 
 CREATE INDEX idx_user_city ON "user" (city);
