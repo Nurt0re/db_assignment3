@@ -39,18 +39,45 @@ def connect_db():
         return None
 
 def execute_sql_file(cursor, filepath):
-    """Execute SQL commands from a file"""
+    """Execute SQL commands from a file and display results"""
     try:
         with open(filepath, 'r') as f:
-            sql_commands = f.read()
-            cursor.execute(sql_commands)
-            return True
+            sql_content = f.read()
+            
+        # Split into individual statements (handling semicolons)
+        statements = [stmt.strip() for stmt in sql_content.split(';') if stmt.strip()]
+        
+        results = []
+        for statement in statements:
+            # Skip comments
+            if statement.startswith('--') or not statement:
+                continue
+                
+            try:
+                cursor.execute(statement)
+                
+                # Try to fetch results if it's a SELECT query
+                if statement.strip().upper().startswith('SELECT') or \
+                   statement.strip().upper().startswith('WITH'):
+                    rows = cursor.fetchall()
+                    colnames = [desc[0] for desc in cursor.description] if cursor.description else []
+                    results.append({
+                        'query': statement[:100] + '...' if len(statement) > 100 else statement,
+                        'columns': colnames,
+                        'rows': rows,
+                        'count': len(rows)
+                    })
+            except psycopg2.Error as e:
+                print(f"Error in statement: {e}")
+                continue
+        
+        return results
     except FileNotFoundError:
         print(f"Error: File '{filepath}' not found")
-        return False
-    except psycopg2.Error as e:
-        print(f"Error executing SQL: {e}")
-        return False
+        return None
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        return None
 
 def display_menu():
     """Display menu of available SQL files"""
@@ -82,6 +109,35 @@ def run_query(choice, conn):
         print("Invalid choice. Please try again.")
         return True
 
+def format_table(columns, rows):
+    """Format query results as a table"""
+    if not rows:
+        return "No results found."
+    
+    # Calculate column widths
+    col_widths = []
+    for i, col in enumerate(columns):
+        max_width = len(str(col))
+        for row in rows:
+            if i < len(row):
+                max_width = max(max_width, len(str(row[i])))
+        col_widths.append(min(max_width, 50))  # Cap at 50 chars
+    
+    # Create header
+    header = " | ".join(str(col).ljust(col_widths[i]) for i, col in enumerate(columns))
+    separator = "-+-".join("-" * width for width in col_widths)
+    
+    # Create rows
+    table_rows = []
+    for row in rows:
+        formatted_row = " | ".join(
+            str(row[i] if i < len(row) else "").ljust(col_widths[i])[:col_widths[i]] 
+            for i in range(len(columns))
+        )
+        table_rows.append(formatted_row)
+    
+    return f"\n{header}\n{separator}\n" + "\n".join(table_rows)
+
 def run_single_query(choice, conn):
     """Execute a single query file"""
     query_info = SQL_FILES[choice]
@@ -92,10 +148,23 @@ def run_single_query(choice, conn):
     
     cursor = conn.cursor()
     try:
-        if execute_sql_file(cursor, query_info['file']):
+        results = execute_sql_file(cursor, query_info['file'])
+        
+        if results is not None:
             conn.commit()
             print(f"✓ Successfully executed {query_info['name']}")
-            print(f"Rows affected: {cursor.rowcount}")
+            
+            # Display results for each SELECT query
+            for i, result in enumerate(results, 1):
+                if result['rows']:
+                    print(f"\n--- Query {i} Results ({result['count']} rows) ---")
+                    print(format_table(result['columns'], result['rows']))
+                else:
+                    print(f"\n--- Query {i}: No results ---")
+            
+            # Show affected rows for non-SELECT queries
+            if not results:
+                print(f"Rows affected: {cursor.rowcount}")
         else:
             conn.rollback()
             print(f"✗ Failed to execute {query_info['name']}")
