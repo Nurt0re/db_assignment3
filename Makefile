@@ -48,7 +48,7 @@ down:
 # Connect to PostgreSQL database
 connect:
 	@echo "Connecting to PostgreSQL database..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME)
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME)
 
 # Stop containers and remove volumes (deletes all data)
 clean:
@@ -66,60 +66,60 @@ clean:
 # Run schema migration (create tables)
 migrate:
 	@echo "Running schema migration..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < schema.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < schema.sql
 	@echo "Schema migration completed."
 
 # Insert sample data into database
 insert:
 	@echo "Inserting sample data..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/insert_data.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/insert_data.sql
 	@echo "Sample data inserted."
 
 # Truncate all tables (remove all data but keep structure)
 truncate:
 	@echo "Truncating all tables..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/truncate_tables.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/truncate_tables.sql
 	@echo "All tables truncated."
 
 # Run update queries
 update:
 	@echo "Running update queries..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/update_queries.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/update_queries.sql
 	@echo "Update queries completed."
 
 # Run delete queries
 delete:
 	@echo "Running delete queries..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/delete_queries.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/delete_queries.sql
 	@echo "Delete queries completed."
 
 # Run simple queries 
 simple:
 	@echo "Running simple queries..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/simple_queries.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/simple_queries.sql
 	@echo "Simple queries completed."
 
 # Run complex queries 
 complex:
 	@echo "Running complex queries..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/complex_queries.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/complex_queries.sql
 	@echo "Complex queries completed."
 
 # Run derived attribute query 
 derived:
 	@echo "Running derived attribute query..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/derived_attribute_query.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/derived_attribute_query.sql
 	@echo "Derived attribute query completed."
 
 # Create and query view operation
 view:
 	@echo "Creating and querying view..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/create_view.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/create_view.sql
 	@echo "View operation completed."
 
 execute_view:
 	@echo "Executing view query..."
-	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST).oregon-postgres.render.com -U $(DB_USER) -d $(DB_NAME) < queries/view_operation.sql
+	PGPASSWORD=$(DB_PASSWORD) psql -h $(DB_HOST) -U $(DB_USER) -d $(DB_NAME) < queries/view_operation.sql
 	@echo "View query executed."
 
 # Install Python dependencies
