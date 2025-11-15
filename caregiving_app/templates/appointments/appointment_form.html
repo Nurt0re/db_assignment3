@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}{{ action }} Appointment{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>{{ action }} Appointment</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="caregiver_user_id">Caregiver*</label>
+            <select id="caregiver_user_id" name="caregiver_user_id" required>
+                <option value="">-- Select Caregiver --</option>
+                {% for caregiver in caregivers %}
+                <option value="{{ caregiver.caregiver_user_id }}" {% if appointment.caregiver_user_id == caregiver.caregiver_user_id %}selected{% endif %}>
+                    {{ caregiver.user.full_name }} ({{ caregiver.caregiving_type }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="member_user_id">Member*</label>
+            <select id="member_user_id" name="member_user_id" required>
+                <option value="">-- Select Member --</option>
+                {% for member in members %}
+                <option value="{{ member.member_user_id }}" {% if appointment.member_user_id == member.member_user_id %}selected{% endif %}>
+                    {{ member.user.full_name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="appointment_date">Date*</label>
+            <input type="date" id="appointment_date" name="appointment_date" value="{% if appointment %}{{ appointment.appointment_date|date:'Y-m-d' }}{% endif %}" required>
+        </div>
+        <div class="form-group">
+            <label for="appointment_time">Time*</label>
+            <input type="time" id="appointment_time" name="appointment_time" value="{% if appointment %}{{ appointment.appointment_time|time:'H:i' }}{% endif %}" required>
+        </div>
+        <div class="form-group">
+            <label for="work_hours">Work Hours*</label>
+            <input type="number" step="0.5" id="work_hours" name="work_hours" value="{{ appointment.work_hours|default:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status*</label>
+            <select id="status" name="status" required>
+                <option value="Scheduled" {% if appointment.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                <option value="Confirmed" {% if appointment.status == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                <option value="Completed" {% if appointment.status == 'Completed' %}selected{% endif %}>Completed</option>
+                <option value="Cancelled" {% if appointment.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+        </div>
+        <div class="actions">
+            <button type="submit" class="btn btn-success">{{ action }} Appointment</button>
+            <a href="{% url 'appointment_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Caregivers - Caregiving Management System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>All Caregivers</h2>
+    <a href="{% url 'caregiver_create' %}" class="btn btn-success">➕ Add New Caregiver</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Gender</th>
+                <th>Hourly Rate</th>
+                <th>City</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for caregiver in caregivers %}
+            <tr>
+                <td>{{ caregiver.caregiver_user_id }}</td>
+                <td>{{ caregiver.user.full_name }}</td>
+                <td>{{ caregiver.caregiving_type }}</td>
+                <td>{{ caregiver.gender }}</td>
+                <td>${{ caregiver.hourly_rate }}</td>
+                <td>{{ caregiver.user.city }}</td>
+                <td>
+                    <a href="{% url 'caregiver_detail' caregiver.caregiver_user_id %}" class="btn">View</a>
+                    <a href="{% url 'caregiver_update' caregiver.caregiver_user_id %}" class="btn btn-secondary">Edit</a>
+                    <form action="{% url 'caregiver_delete' caregiver.caregiver_user_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center;">No caregivers found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

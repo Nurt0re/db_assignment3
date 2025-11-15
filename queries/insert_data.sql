@@ -205,7 +205,7 @@ VALUES
 	(
 		6,
 		'Child Care',
-		'CPR certified preferred, flexible hours',
+		'CPR certified preferred, flexible hours, soft-spoken personality required',
 		'2025-11-05'
 	),
 	(
@@ -216,8 +216,8 @@ VALUES
 	),
 	(
 		10,
-		'Medical Care',
-		'Nursing background required',
+		'Elderly Care',
+		'Nursing background required, soft-spoken and patient',
 		'2025-11-10'
 	),
 	(

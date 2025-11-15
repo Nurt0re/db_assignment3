@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Appointment #{{ appointment.appointment_id }}{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Appointment Details</h2>
+    <table style="width: auto;">
+        <tr><th>ID:</th><td>{{ appointment.appointment_id }}</td></tr>
+        <tr><th>Caregiver:</th><td>{{ appointment.caregiver.user.full_name }}</td></tr>
+        <tr><th>Member:</th><td>{{ appointment.member.user.full_name }}</td></tr>
+        <tr><th>Date:</th><td>{{ appointment.appointment_date }}</td></tr>
+        <tr><th>Time:</th><td>{{ appointment.appointment_time }}</td></tr>
+        <tr><th>Work Hours:</th><td>{{ appointment.work_hours }}</td></tr>
+        <tr><th>Status:</th><td>{{ appointment.status }}</td></tr>
+        <tr><th>Total Cost:</th><td>${{ appointment.total_cost }}</td></tr>
+    </table>
+    <div class="actions">
+        <a href="{% url 'appointment_update' appointment.appointment_id %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'appointment_list' %}" class="btn">Back to List</a>
+        <form action="{% url 'appointment_delete' appointment.appointment_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Appointments{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>All Appointments</h2>
+    <a href="{% url 'appointment_create' %}" class="btn btn-success">➕ Create New Appointment</a>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Caregiver</th><th>Member</th><th>Date</th><th>Time</th><th>Hours</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td>{{ appt.appointment_id }}</td>
+                <td>{{ appt.caregiver.user.full_name }}</td>
+                <td>{{ appt.member.user.full_name }}</td>
+                <td>{{ appt.appointment_date }}</td>
+                <td>{{ appt.appointment_time }}</td>
+                <td>{{ appt.work_hours }}</td>
+                <td>{{ appt.status }}</td>
+                <td>
+                    <a href="{% url 'appointment_detail' appt.appointment_id %}" class="btn">View</a>
+                    <a href="{% url 'appointment_update' appt.appointment_id %}" class="btn btn-secondary">Edit</a>
+                    <form action="{% url 'appointment_delete' appt.appointment_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8" style="text-align: center;">No appointments found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Members{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>All Members</h2>
+    <a href="{% url 'member_create' %}" class="btn btn-success">➕ Add New Member</a>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Name</th><th>City</th><th>House Rules</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.member_user_id }}</td>
+                <td>{{ member.user.full_name }}</td>
+                <td>{{ member.user.city }}</td>
+                <td>{{ member.house_rules|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'member_detail' member.member_user_id %}" class="btn">View</a>
+                    <a href="{% url 'member_update' member.member_user_id %}" class="btn btn-secondary">Edit</a>
+                    <form action="{% url 'member_delete' member.member_user_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align: center;">No members found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

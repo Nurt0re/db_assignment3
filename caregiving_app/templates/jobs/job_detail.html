@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Job #{{ job.job_id }}{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Job Details</h2>
+    <table style="width: auto;">
+        <tr><th>Job ID:</th><td>{{ job.job_id }}</td></tr>
+        <tr><th>Posted By:</th><td>{{ job.member.user.full_name }}</td></tr>
+        <tr><th>Required Type:</th><td>{{ job.required_caregiving_type }}</td></tr>
+        <tr><th>Date Posted:</th><td>{{ job.date_posted }}</td></tr>
+        <tr><th>Requirements:</th><td>{{ job.other_requirements|default:"N/A" }}</td></tr>
+    </table>
+    <div class="actions">
+        <a href="{% url 'job_update' job.job_id %}" class="btn btn-secondary">Edit</a>
+        <a href="{% url 'job_list' %}" class="btn">Back to List</a>
+        <form action="{% url 'job_delete' job.job_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

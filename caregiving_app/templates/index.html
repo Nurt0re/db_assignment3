@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Caregiving Management System{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Welcome to Caregiving Management System</h2>
+    <p>This application manages caregiving services using Django and SQLAlchemy ORM.</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <h3>{{ stats.total_users }}</h3>
+        <p>Total Users</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+        <h3>{{ stats.total_caregivers }}</h3>
+        <p>Caregivers</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+        <h3>{{ stats.total_members }}</h3>
+        <p>Members</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+        <h3>{{ stats.total_jobs }}</h3>
+        <p>Jobs Posted</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+        <h3>{{ stats.total_appointments }}</h3>
+        <p>Appointments</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <div class="actions">
+        <a href="{% url 'user_create' %}" class="btn btn-success">➕ Add User</a>
+        <a href="{% url 'caregiver_create' %}" class="btn btn-success">➕ Add Caregiver</a>
+        <a href="{% url 'member_create' %}" class="btn btn-success">➕ Add Member</a>
+        <a href="{% url 'job_create' %}" class="btn btn-success">➕ Post Job</a>
+        <a href="{% url 'appointment_create' %}" class="btn btn-success">➕ Create Appointment</a>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Features</h2>
+    <ul style="margin-left: 1.5rem; line-height: 2;">
+        <li>✅ Full CRUD operations for all entities</li>
+        <li>✅ SQLAlchemy ORM integration</li>
+        <li>✅ PostgreSQL database backend</li>
+        <li>✅ Django web framework</li>
+        <li>✅ Relationship management (Users, Caregivers, Members, Jobs, Appointments)</li>
+    </ul>
+</div>
+{% endblock %}

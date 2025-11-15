@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Jobs{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>All Jobs</h2>
+    <a href="{% url 'job_create' %}" class="btn btn-success">➕ Post New Job</a>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Posted By</th><th>Type</th><th>Date Posted</th><th>Requirements</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job.job_id }}</td>
+                <td>{{ job.member.user.full_name }}</td>
+                <td>{{ job.required_caregiving_type }}</td>
+                <td>{{ job.date_posted }}</td>
+                <td>{{ job.other_requirements|truncatewords:10 }}</td>
+                <td>
+                    <a href="{% url 'job_detail' job.job_id %}" class="btn">View</a>
+                    <a href="{% url 'job_update' job.job_id %}" class="btn btn-secondary">Edit</a>
+                    <form action="{% url 'job_delete' job.job_id %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure?');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" style="text-align: center;">No jobs found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
