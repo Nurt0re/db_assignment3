@@ -37,6 +37,9 @@ if not DEBUG:
     # Add Render.com domain
     ALLOWED_HOSTS.append('.onrender.com')
 
+# Always allow the specific Render domain
+ALLOWED_HOSTS.append('db-assignment3-3rwo.onrender.com')
+
 
 # Application definition
 
